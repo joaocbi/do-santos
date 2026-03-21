@@ -22,12 +22,12 @@
       publicKey: "",
       accessToken: "",
       pixKey: "",
-      webhookUrl: "",
+      webhookUrl: getDefaultWebhookUrl(),
       notes: "",
       webhookJson: {
         evento: "payment.updated",
         origem: "mercado_pago",
-        url: "https://seu-dominio.com/webhook",
+        url: getDefaultWebhookUrl(),
         ativo: true,
       },
     },
@@ -143,6 +143,14 @@
 
   function formatJson(value) {
     return JSON.stringify(value, null, 2);
+  }
+
+  function getDefaultWebhookUrl() {
+    if (typeof window === "undefined") {
+      return "/api/mercadopago/webhook";
+    }
+
+    return `${window.location.origin}/api/mercadopago/webhook`;
   }
 
   function getCategoryById(data, categoryId) {
@@ -448,9 +456,16 @@
     form.elements.publicKey.value = data.mercadopago.publicKey;
     form.elements.accessToken.value = data.mercadopago.accessToken;
     form.elements.pixKey.value = data.mercadopago.pixKey;
-    form.elements.webhookUrl.value = data.mercadopago.webhookUrl;
+    form.elements.webhookUrl.value = data.mercadopago.webhookUrl || getDefaultWebhookUrl();
     form.elements.notes.value = data.mercadopago.notes;
-    form.elements.webhookJson.value = formatJson(data.mercadopago.webhookJson || {});
+    form.elements.webhookJson.value = formatJson(
+      data.mercadopago.webhookJson || {
+        evento: "payment.updated",
+        origem: "mercado_pago",
+        url: getDefaultWebhookUrl(),
+        ativo: true,
+      }
+    );
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -470,9 +485,12 @@
         publicKey: form.elements.publicKey.value.trim(),
         accessToken: form.elements.accessToken.value.trim(),
         pixKey: form.elements.pixKey.value.trim(),
-        webhookUrl: form.elements.webhookUrl.value.trim(),
+        webhookUrl: form.elements.webhookUrl.value.trim() || getDefaultWebhookUrl(),
         notes: form.elements.notes.value.trim(),
-        webhookJson: parsedWebhookJson,
+        webhookJson: {
+          ...parsedWebhookJson,
+          url: parsedWebhookJson.url || form.elements.webhookUrl.value.trim() || getDefaultWebhookUrl(),
+        },
       };
 
       saveData(data);
