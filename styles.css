@@ -110,6 +110,8 @@ input {
   width: 62px;
   height: 62px;
   border-radius: 18px;
+  object-fit: cover;
+  background: #050403;
   box-shadow: var(--shadow);
   border: 1px solid rgba(212, 166, 64, 0.28);
 }
