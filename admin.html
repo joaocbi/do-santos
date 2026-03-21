@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Painel Admin | Do Santos Market</title>
+    <meta
+      name="description"
+      content="Painel administrativo da Do Santos Market para gerenciar cliente, pagamentos, Mercado Pago, entregas, categorias e produtos."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body data-page="admin">
+    <div class="admin-login-overlay" id="adminLoginOverlay">
+      <form class="admin-login-card" id="adminLoginForm">
+        <span>Painel restrito</span>
+        <h1>Acesso administrativo</h1>
+        <p>Este painel não fica visível para clientes no site público.</p>
+        <label for="adminPassword">Senha do painel</label>
+        <input id="adminPassword" name="adminPassword" type="password" placeholder="Digite a senha" required />
+        <button type="submit">Entrar</button>
+        <small>Senha padrão inicial: <strong>dosantos123</strong></small>
+        <p class="admin-login-error" id="adminLoginError"></p>
+      </form>
+    </div>
+
+    <div class="admin-shell" id="adminShell">
+      <aside class="admin-sidebar">
+        <div class="admin-brand">
+          <img src="assets/logo.jpeg" alt="Logo da Do Santos Market" />
+          <div>
+            <strong>Do Santos Market</strong>
+            <span>Painel administrativo</span>
+          </div>
+        </div>
+
+        <nav class="admin-nav">
+          <a href="#cliente">Dados do cliente</a>
+          <a href="#pagamentos">Pagamentos</a>
+          <a href="#mercadopago">Mercado Pago</a>
+          <a href="#entregas">Entregas</a>
+          <a href="#categorias">Categorias</a>
+          <a href="#produtos">Produtos</a>
+          <a href="#resumo">Resumo</a>
+        </nav>
+      </aside>
+
+      <main class="admin-main">
+        <header class="admin-header">
+          <div>
+            <span>Painel oculto do cliente final</span>
+            <h1>Gestão completa da loja</h1>
+          </div>
+          <button type="button" class="secondary-button" id="logoutButton">Sair</button>
+        </header>
+
+        <section class="admin-section" id="cliente">
+          <div class="section-title">
+            <span>Dados do cliente</span>
+            <h2>Informações principais da loja</h2>
+          </div>
+
+          <form class="admin-form" id="clientForm">
+            <label>
+              Nome da loja
+              <input name="storeName" type="text" placeholder="Nome da loja" />
+            </label>
+            <label>
+              Responsável
+              <input name="responsibleName" type="text" placeholder="Nome do responsável" />
+            </label>
+            <label>
+              Telefone
+              <input name="phone" type="text" placeholder="Telefone" />
+            </label>
+            <label>
+              E-mail
+              <input name="email" type="email" placeholder="E-mail" />
+            </label>
+            <label>
+              Documento
+              <input name="document" type="text" placeholder="CNPJ ou CPF" />
+            </label>
+            <label>
+              Endereço
+              <input name="address" type="text" placeholder="Endereço" />
+            </label>
+            <label>
+              Cidade
+              <input name="city" type="text" placeholder="Cidade" />
+            </label>
+            <label>
+              Estado
+              <input name="state" type="text" placeholder="Estado" />
+            </label>
+            <label>
+              CEP
+              <input name="zipCode" type="text" placeholder="CEP" />
+            </label>
+            <label class="full-width">
+              Descrição da loja
+              <textarea name="description" rows="4" placeholder="Descrição institucional da loja"></textarea>
+            </label>
+            <label class="full-width">
+              Senha do painel
+              <input name="adminPassword" type="text" placeholder="Nova senha do painel" />
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Salvar dados do cliente</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="admin-section" id="pagamentos">
+          <div class="section-title">
+            <span>Pagamentos</span>
+            <h2>Cadastre formas de pagamento</h2>
+          </div>
+
+          <form class="admin-form compact-form" id="paymentMethodForm">
+            <label>
+              Nome da forma de pagamento
+              <input name="name" type="text" placeholder="Ex.: Cartão de crédito" required />
+            </label>
+            <label>
+              Detalhes
+              <input name="details" type="text" placeholder="Ex.: até 4x sem juros" required />
+            </label>
+            <label>
+              Status
+              <select name="active">
+                <option value="true">Ativo</option>
+                <option value="false">Inativo</option>
+              </select>
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Adicionar forma de pagamento</button>
+            </div>
+          </form>
+
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Forma</th>
+                  <th>Detalhes</th>
+                  <th>Status</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="paymentMethodTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" id="mercadopago">
+          <div class="section-title">
+            <span>Mercado Pago</span>
+            <h2>Configuração de recebimento</h2>
+          </div>
+
+          <form class="admin-form" id="mercadoPagoForm">
+            <label>
+              Habilitar Mercado Pago
+              <select name="enabled">
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </label>
+            <label>
+              Public key
+              <input name="publicKey" type="text" placeholder="Public key" />
+            </label>
+            <label>
+              Access token
+              <input name="accessToken" type="text" placeholder="Access token" />
+            </label>
+            <label>
+              Chave PIX
+              <input name="pixKey" type="text" placeholder="Chave PIX" />
+            </label>
+            <label>
+              URL de webhook
+              <input name="webhookUrl" type="text" placeholder="Webhook" />
+            </label>
+            <label class="full-width">
+              Observações
+              <textarea name="notes" rows="4" placeholder="Observações sobre o recebimento"></textarea>
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Salvar configuração do Mercado Pago</button>
+            </div>
+          </form>
+
+          <p class="warning-text">
+            Esta versão salva configurações localmente no navegador. Para cobranças reais com Mercado Pago, o ideal é integrar um backend seguro.
+          </p>
+        </section>
+
+        <section class="admin-section" id="entregas">
+          <div class="section-title">
+            <span>Entregas</span>
+            <h2>Cadastre métodos de entrega</h2>
+          </div>
+
+          <form class="admin-form compact-form" id="deliveryMethodForm">
+            <label>
+              Nome
+              <input name="name" type="text" placeholder="Ex.: Motoboy" required />
+            </label>
+            <label>
+              Prazo
+              <input name="deadline" type="text" placeholder="Ex.: 2 dias úteis" required />
+            </label>
+            <label>
+              Valor
+              <input name="price" type="number" step="0.01" min="0" placeholder="0.00" required />
+            </label>
+            <label class="full-width">
+              Regiões atendidas
+              <input name="regions" type="text" placeholder="Ex.: São Paulo, ABC, Interior" required />
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Adicionar método de entrega</button>
+            </div>
+          </form>
+
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Método</th>
+                  <th>Prazo</th>
+                  <th>Valor</th>
+                  <th>Regiões</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="deliveryMethodTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" id="categorias">
+          <div class="section-title">
+            <span>Categorias</span>
+            <h2>Cadastre categorias e subcategorias</h2>
+          </div>
+
+          <form class="admin-form compact-form" id="categoryForm">
+            <label>
+              Nome da categoria
+              <input name="name" type="text" placeholder="Ex.: Feminino" required />
+            </label>
+            <label class="full-width">
+              Subcategorias
+              <input
+                name="subcategories"
+                type="text"
+                placeholder="Ex.: Vestidos, Blusas, Bolsas"
+                required
+              />
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Adicionar categoria</button>
+            </div>
+          </form>
+
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Categoria</th>
+                  <th>Subcategorias</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" id="produtos">
+          <div class="section-title">
+            <span>Produtos</span>
+            <h2>Inserir, editar e excluir produtos</h2>
+          </div>
+
+          <form class="admin-form" id="productForm">
+            <input name="editingProductId" type="hidden" />
+            <label>
+              Nome do produto
+              <input name="name" type="text" placeholder="Nome do produto" required />
+            </label>
+            <label>
+              Categoria
+              <select name="categoryId" id="productCategorySelect" required></select>
+            </label>
+            <label>
+              Subcategoria
+              <select name="subcategoryId" id="productSubcategorySelect" required></select>
+            </label>
+            <label>
+              Valor de custo
+              <input name="costValue" type="number" step="0.01" min="0" placeholder="0.00" required />
+            </label>
+            <label>
+              Percentual sobre o valor
+              <input name="marginPercent" type="number" step="0.01" min="0" placeholder="0" required />
+            </label>
+            <label>
+              Valor de venda
+              <input name="saleValue" type="number" step="0.01" min="0" placeholder="0.00" required />
+            </label>
+            <label>
+              Fornecedor
+              <input name="supplier" type="text" placeholder="Fornecedor" required />
+            </label>
+            <label>
+              SKU automático
+              <input name="sku" type="text" placeholder="Gerado automaticamente" readonly />
+            </label>
+            <label class="full-width">
+              Descrição
+              <textarea name="description" rows="4" placeholder="Descrição do produto"></textarea>
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Salvar produto</button>
+              <button type="button" class="secondary-button" id="cancelProductEditButton">Cancelar edição</button>
+            </div>
+          </form>
+
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Produto</th>
+                  <th>Categoria</th>
+                  <th>Custo</th>
+                  <th>%</th>
+                  <th>Venda</th>
+                  <th>Fornecedor</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" id="resumo">
+          <div class="section-title">
+            <span>Resumo</span>
+            <h2>Painel operacional</h2>
+          </div>
+
+          <div class="summary-grid">
+            <article class="summary-card">
+              <span>Total de produtos</span>
+              <strong id="summaryProducts">0</strong>
+            </article>
+            <article class="summary-card">
+              <span>Total de categorias</span>
+              <strong id="summaryCategories">0</strong>
+            </article>
+            <article class="summary-card">
+              <span>Pagamentos ativos</span>
+              <strong id="summaryPayments">0</strong>
+            </article>
+            <article class="summary-card">
+              <span>Entregas cadastradas</span>
+              <strong id="summaryDeliveries">0</strong>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
