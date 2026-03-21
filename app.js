@@ -24,6 +24,12 @@
       pixKey: "",
       webhookUrl: "",
       notes: "",
+      webhookJson: {
+        evento: "payment.updated",
+        origem: "mercado_pago",
+        url: "https://seu-dominio.com/webhook",
+        ativo: true,
+      },
     },
     paymentMethods: [
       { id: "pm-1", name: "Cartão de crédito", details: "Até 4x sem juros", active: true },
@@ -133,6 +139,10 @@
       style: "currency",
       currency: "BRL",
     });
+  }
+
+  function formatJson(value) {
+    return JSON.stringify(value, null, 2);
   }
 
   function getCategoryById(data, categoryId) {
@@ -327,6 +337,12 @@
     }
   }
 
+  function renderWebhookPreview(data) {
+    const preview = document.getElementById("webhookJsonPreview");
+    if (!preview) return;
+    preview.textContent = formatJson(data.mercadopago.webhookJson || {});
+  }
+
   function renderBrandPills(data) {
     const container = document.getElementById("brandPillRow");
     if (!container) return;
@@ -383,6 +399,7 @@
     setupProductForm(data);
     renderAdminTables(data);
     renderSummary(data);
+    renderWebhookPreview(data);
   }
 
   function setupClientForm(data) {
@@ -433,9 +450,20 @@
     form.elements.pixKey.value = data.mercadopago.pixKey;
     form.elements.webhookUrl.value = data.mercadopago.webhookUrl;
     form.elements.notes.value = data.mercadopago.notes;
+    form.elements.webhookJson.value = formatJson(data.mercadopago.webhookJson || {});
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
+
+      let parsedWebhookJson = {};
+
+      try {
+        parsedWebhookJson = JSON.parse(form.elements.webhookJson.value || "{}");
+      } catch (error) {
+        console.error("JSON de webhook inválido:", error);
+        alert("O JSON do webhook está inválido. Revise o conteúdo antes de salvar.");
+        return;
+      }
 
       data.mercadopago = {
         enabled: form.elements.enabled.value === "true",
@@ -444,9 +472,12 @@
         pixKey: form.elements.pixKey.value.trim(),
         webhookUrl: form.elements.webhookUrl.value.trim(),
         notes: form.elements.notes.value.trim(),
+        webhookJson: parsedWebhookJson,
       };
 
       saveData(data);
+      form.elements.webhookJson.value = formatJson(data.mercadopago.webhookJson || {});
+      renderWebhookPreview(data);
       console.log("Configuração do Mercado Pago atualizada:", data.mercadopago);
       alert("Configuração do Mercado Pago salva com sucesso.");
     });

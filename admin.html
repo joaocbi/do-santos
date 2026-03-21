@@ -194,10 +194,23 @@
               Observações
               <textarea name="notes" rows="4" placeholder="Observações sobre o recebimento"></textarea>
             </label>
+            <label class="full-width">
+              Webhook JSON
+              <textarea
+                name="webhookJson"
+                rows="12"
+                placeholder='{\n  "evento": "payment.updated",\n  "origem": "mercado_pago",\n  "url": "https://seu-dominio.com/webhook"\n}'
+              ></textarea>
+            </label>
             <div class="form-actions full-width">
               <button type="submit">Salvar configuração do Mercado Pago</button>
             </div>
           </form>
+
+          <div class="json-preview-card">
+            <span>Modelo atual do webhook</span>
+            <pre id="webhookJsonPreview"></pre>
+          </div>
 
           <p class="warning-text">
             Esta versão salva configurações localmente no navegador. Para cobranças reais com Mercado Pago, o ideal é integrar um backend seguro.

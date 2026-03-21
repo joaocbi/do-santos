@@ -232,6 +232,32 @@ table,
   overflow: auto;
 }
 
+.json-preview-card {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(8, 7, 5, 0.9);
+}
+
+.json-preview-card span {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.json-preview-card pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--brand-accent);
+  line-height: 1.65;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
