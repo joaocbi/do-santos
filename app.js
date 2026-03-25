@@ -14,7 +14,7 @@
       state: "",
       zipCode: "",
       description:
-        "Dados da empresa, atendimento e informações principais podem ser atualizados pelo painel administrativo.",
+        "Moda, elegância e atendimento dedicado para valorizar cada escolha.",
     },
     mercadopago: {
       enabled: false,
@@ -287,7 +287,7 @@
       emptyCard.appendChild(createEl("span", "product-badge", "Sem produtos"));
       emptyCard.appendChild(createEl("div", "product-thumb"));
       emptyCard.appendChild(createEl("h3", "", "Nenhum produto cadastrado"));
-      emptyCard.appendChild(createEl("p", "", "Cadastre os produtos no painel admin para exibir aqui."));
+      emptyCard.appendChild(createEl("p", "", "Novos produtos serão exibidos aqui em breve."));
       emptyCard.appendChild(createEl("strong", "", "R$ 0,00"));
       container.appendChild(emptyCard);
       return;
@@ -302,7 +302,7 @@
       card.appendChild(createEl("span", "product-badge", badgeText));
       card.appendChild(createEl("div", "product-thumb"));
       card.appendChild(createEl("h3", "", product.name));
-      card.appendChild(createEl("p", "", product.description || "Produto cadastrado pelo painel administrativo."));
+      card.appendChild(createEl("p", "", product.description || "Produto em destaque da coleção."));
       card.appendChild(createEl("strong", "", currencyBRL(product.saleValue)));
       container.appendChild(card);
     });
@@ -318,7 +318,7 @@
       clientCard.innerHTML = `
         <span>Dados do cliente</span>
         <h3>${data.client.storeName || "Do Santos Market"}</h3>
-        <p>${[data.client.responsibleName, data.client.phone, data.client.email].filter(Boolean).join(" | ") || "Cadastre telefone, e-mail e responsável no painel admin."}</p>
+        <p>${[data.client.responsibleName, data.client.phone, data.client.email].filter(Boolean).join(" | ") || "Atendimento dedicado para oferecer uma experiência premium."}</p>
       `;
     }
 
@@ -327,7 +327,7 @@
       paymentCard.innerHTML = `
         <span>Pagamentos</span>
         <h3>${activeMethods.length ? activeMethods[0].name : "Formas de pagamento"}</h3>
-        <p>${activeMethods.map((item) => `${item.name}: ${item.details}`).join(" | ") || "Configure parcelamentos, PIX, cartão, boleto e regras comerciais."}</p>
+        <p>${activeMethods.map((item) => `${item.name}: ${item.details}`).join(" | ") || "Consulte as opções de pagamento disponíveis para sua compra."}</p>
       `;
     }
 
@@ -335,7 +335,7 @@
       deliveryCard.innerHTML = `
         <span>Entregas</span>
         <h3>${data.deliveryMethods[0]?.name || "Métodos de entrega"}</h3>
-        <p>${data.deliveryMethods.map((item) => `${item.name}: ${item.deadline}`).join(" | ") || "Cadastre regiões atendidas, valores e prazos de envio."}</p>
+        <p>${data.deliveryMethods.map((item) => `${item.name}: ${item.deadline}`).join(" | ") || "Consulte prazos e modalidades de entrega disponíveis."}</p>
       `;
     }
 

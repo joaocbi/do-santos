@@ -498,46 +498,6 @@ h1, h2, h3 {
   font-size: 1.2rem;
   font-weight: 700;
 }
-.admin-data-strip {
-  padding: 36px 0;
-}
-
-.admin-data-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.admin-data-card {
-  padding: 26px;
-  border-radius: 28px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  background:
-    radial-gradient(circle at top right, rgba(212, 166, 64, 0.2), transparent 32%),
-    linear-gradient(180deg, #18130d, #231c13);
-}
-
-.admin-data-card span {
-  display: inline-block;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.76rem;
-  font-weight: 800;
-  color: var(--brand-primary);
-}
-
-.admin-data-card h3 {
-  margin: 18px 0 12px;
-  font-size: 1.25rem;
-}
-
-.admin-data-card p {
-  margin: 0;
-  color: var(--text-secondary);
-  line-height: 1.65;
-}
-
 .offer-card a {
   display: inline-flex;
   margin-top: 18px;
@@ -630,8 +590,7 @@ h1, h2, h3 {
   .offer-grid,
   .promo-items,
   .product-grid,
-  .brand-pill-row,
-  .admin-data-grid {
+  .brand-pill-row {
     grid-template-columns: 1fr;
   }
 
