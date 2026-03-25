@@ -378,7 +378,7 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const input = form.elements.namedItem("adminPassword");
-      const password = input ? input.value : "";
+      const password = input ? input.value.trim() : "";
 
       try {
         const response = await fetch("/api/admin/login", {
@@ -389,8 +389,12 @@
           body: JSON.stringify({ password }),
         });
 
+        const payload = await response.json().catch(() => ({
+          message: "Falha ao validar acesso.",
+        }));
+
         if (!response.ok) {
-          throw new Error("Senha inválida.");
+          throw new Error(payload.message || "Senha inválida.");
         }
 
         sessionStorage.setItem(SESSION_KEY, "true");
@@ -398,7 +402,7 @@
         errorLabel.textContent = "";
         form.reset();
       } catch (error) {
-        errorLabel.textContent = "Senha inválida.";
+        errorLabel.textContent = error.message || "Senha inválida.";
       }
     });
 
