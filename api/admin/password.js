@@ -1,7 +1,19 @@
-const { validateAdminPassword, updateAdminPassword } = require("../_lib/admin-auth");
+const { resolveAdminAuth, validateAdminPassword, updateAdminPassword } = require("../_lib/admin-auth");
 
 module.exports = async function handler(req, res) {
-  if ((req.method || "GET") !== "POST") {
+  const method = req.method || "GET";
+
+  if (method === "GET") {
+    const auth = await resolveAdminAuth();
+
+    return res.status(200).json({
+      ok: true,
+      source: auth.source,
+      updatedAt: auth.updatedAt,
+    });
+  }
+
+  if (method !== "POST") {
     return res.status(405).json({
       ok: false,
       message: "Metodo nao permitido.",

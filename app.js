@@ -466,8 +466,34 @@
 
   function setupAdminPasswordForm() {
     const form = document.getElementById("adminPasswordChangeForm");
+    const sourceLabel = document.getElementById("adminPasswordSourceNotice");
     const messageLabel = document.getElementById("adminPasswordChangeMessage");
-    if (!form || !messageLabel) return;
+    if (!form || !messageLabel || !sourceLabel) return;
+
+    function formatPasswordSource(source, updatedAt) {
+      if (source === "storage") {
+        const updatedText = updatedAt
+          ? ` Última alteração: ${new Date(updatedAt).toLocaleString("pt-BR")}.`
+          : "";
+        return `Senha ativa carregada do storage seguro do projeto.${updatedText}`;
+      }
+
+      if (source === "environment") {
+        return "Senha ativa carregada da variável de ambiente da Vercel.";
+      }
+
+      return "Senha do painel não configurada no ambiente.";
+    }
+
+    async function loadPasswordSourceStatus() {
+      try {
+        const response = await fetchJson("/api/admin/password");
+        sourceLabel.textContent = formatPasswordSource(response.source, response.updatedAt);
+      } catch (error) {
+        console.error("Falha ao carregar a origem da senha do painel:", error);
+        sourceLabel.textContent = "Não foi possível carregar a origem da senha ativa.";
+      }
+    }
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -477,12 +503,12 @@
       const confirmPassword = form.elements.confirmPassword.value.trim();
 
       if (newPassword.length < 6) {
-        messageLabel.textContent = "The new password must have at least 6 characters.";
+        messageLabel.textContent = "A nova senha deve ter pelo menos 6 caracteres.";
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        messageLabel.textContent = "The new password confirmation does not match.";
+        messageLabel.textContent = "A confirmação da nova senha não confere.";
         return;
       }
 
@@ -499,14 +525,17 @@
           }),
         });
 
-        console.log("Admin password updated successfully.");
-        messageLabel.textContent = response.message || "Admin password updated successfully.";
+        console.log("Senha do admin atualizada com sucesso.");
+        messageLabel.textContent = response.message || "Senha do painel atualizada com sucesso.";
         form.reset();
+        await loadPasswordSourceStatus();
       } catch (error) {
-        console.error("Failed to update admin password:", error);
-        messageLabel.textContent = error.message || "Failed to update admin password.";
+        console.error("Falha ao atualizar a senha do admin:", error);
+        messageLabel.textContent = error.message || "Não foi possível atualizar a senha do painel.";
       }
     });
+
+    loadPasswordSourceStatus();
   }
 
   function setupMercadoPagoForm(data) {
