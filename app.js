@@ -1,6 +1,7 @@
 (function () {
   const STORAGE_KEY = "dosSantosMarketData";
   const SESSION_KEY = "dosSantosAdminAuthenticated";
+  const LOCAL_ADMIN_PASSWORD = "dosantos123";
 
   const defaultData = {
     client: {
@@ -150,6 +151,62 @@
     }
 
     return `${window.location.origin}/api/mercadopago/webhook`;
+  }
+
+  function isLocalPreviewMode() {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return ["127.0.0.1", "localhost"].includes(window.location.hostname);
+  }
+
+  function normalizePasswordValue(password) {
+    return String(password || "").replace(/\r/g, "").trim();
+  }
+
+  async function validateAdminPassword(password) {
+    const normalizedPassword = normalizePasswordValue(password);
+
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password: normalizedPassword }),
+      });
+
+      const payload = await response.json().catch(() => ({
+        message: "Falha ao validar acesso.",
+      }));
+
+      if (!response.ok) {
+        throw new Error(payload.message || "Senha inválida.");
+      }
+
+      return {
+        ok: true,
+        message: payload.message || "Login realizado com sucesso.",
+        source: payload.source || "server",
+      };
+    } catch (error) {
+      if (!isLocalPreviewMode()) {
+        throw error;
+      }
+
+      if (normalizedPassword !== LOCAL_ADMIN_PASSWORD) {
+        throw new Error("Senha inválida no modo local.");
+      }
+
+      console.log("Admin login validated in local preview mode.");
+
+      return {
+        ok: true,
+        message: "Login local realizado com sucesso.",
+        source: "local-preview",
+      };
+    }
   }
 
   function getCategoryById(data, categoryId) {
@@ -381,25 +438,14 @@
       const password = input ? input.value.trim() : "";
 
       try {
-        const response = await fetch("/api/admin/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ password }),
-        });
-
-        const payload = await response.json().catch(() => ({
-          message: "Falha ao validar acesso.",
-        }));
-
-        if (!response.ok) {
-          throw new Error(payload.message || "Senha inválida.");
-        }
+        const payload = await validateAdminPassword(password);
 
         sessionStorage.setItem(SESSION_KEY, "true");
         overlay.classList.add("hidden");
-        errorLabel.textContent = "";
+        errorLabel.textContent =
+          payload.source === "local-preview"
+            ? "Modo local ativo. A validação do painel está usando a senha local."
+            : "";
         form.reset();
       } catch (error) {
         errorLabel.textContent = error.message || "Senha inválida.";
