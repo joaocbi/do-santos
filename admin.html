@@ -26,7 +26,7 @@
         <label for="adminPassword">Senha do painel</label>
         <input id="adminPassword" name="adminPassword" type="password" placeholder="Digite a senha" required />
         <button type="submit">Entrar</button>
-        <small>Configure a senha do painel por ambiente para mais segurança.</small>
+        <small>O acesso depende da variável `ADMIN_PANEL_PASSWORD` configurada na Vercel.</small>
         <p class="admin-login-error" id="adminLoginError"></p>
       </form>
     </div>

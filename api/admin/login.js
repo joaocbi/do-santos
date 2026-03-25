@@ -8,7 +8,14 @@ module.exports = async function handler(req, res) {
 
   const body = req.body || {};
   const password = body.password || "";
-  const configuredPassword = process.env.ADMIN_PANEL_PASSWORD || "dosantos123";
+  const configuredPassword = process.env.ADMIN_PANEL_PASSWORD || "";
+
+  if (!configuredPassword) {
+    return res.status(503).json({
+      ok: false,
+      message: "A senha do painel não está configurada no ambiente.",
+    });
+  }
 
   if (password !== configuredPassword) {
     return res.status(401).json({
