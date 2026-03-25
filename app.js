@@ -15,7 +15,6 @@
       zipCode: "",
       description:
         "Dados da empresa, atendimento e informações principais podem ser atualizados pelo painel administrativo.",
-      adminPassword: "dosantos123",
     },
     mercadopago: {
       enabled: false,
@@ -376,17 +375,29 @@
       overlay.classList.add("hidden");
     }
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const input = form.elements.namedItem("adminPassword");
       const password = input ? input.value : "";
 
-      if (password === data.client.adminPassword) {
+      try {
+        const response = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Senha inválida.");
+        }
+
         sessionStorage.setItem(SESSION_KEY, "true");
         overlay.classList.add("hidden");
         errorLabel.textContent = "";
         form.reset();
-      } else {
+      } catch (error) {
         errorLabel.textContent = "Senha inválida.";
       }
     });
@@ -438,10 +449,9 @@
         state: form.elements.state.value.trim(),
         zipCode: form.elements.zipCode.value.trim(),
         description: form.elements.description.value.trim(),
-        adminPassword: form.elements.adminPassword.value.trim() || data.client.adminPassword,
       };
 
-      form.elements.adminPassword.value = data.client.adminPassword;
+      form.elements.adminPassword.value = "";
       saveData(data);
       renderSite(data);
       renderSummary(data);
