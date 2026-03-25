@@ -1,4 +1,4 @@
-const { readJsonFile } = require("../_lib/store");
+const { readData, isKvEnabled } = require("../_lib/store");
 
 module.exports = async function handler(req, res) {
   if ((req.method || "GET") !== "GET") {
@@ -8,11 +8,12 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const logs = readJsonFile("webhook-logs.json", []);
+  const logs = await readData("webhook-logs.json", []);
 
   return res.status(200).json({
     ok: true,
     total: logs.length,
     logs,
+    storage: (await isKvEnabled()) ? "upstash-redis" : "local-fallback",
   });
 };

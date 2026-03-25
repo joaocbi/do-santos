@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { readJsonFile, writeJsonFile } = require("../_lib/store");
+const { readData, writeData, isKvEnabled } = require("../_lib/store");
 
 function validateSignature(req) {
   const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET || "";
@@ -29,10 +29,10 @@ function validateSignature(req) {
   };
 }
 
-function appendWebhookLog(logEntry) {
-  const logs = readJsonFile("webhook-logs.json", []);
+async function appendWebhookLog(logEntry) {
+  const logs = await readData("webhook-logs.json", []);
   logs.unshift(logEntry);
-  writeJsonFile("webhook-logs.json", logs.slice(0, 100));
+  await writeData("webhook-logs.json", logs.slice(0, 100));
 }
 
 module.exports = async function handler(req, res) {
@@ -84,12 +84,13 @@ module.exports = async function handler(req, res) {
     signatureStatus,
   };
 
-  appendWebhookLog(logEntry);
+  await appendWebhookLog(logEntry);
 
   return res.status(200).json({
     ok: true,
     message: "Webhook recebido com sucesso.",
     receivedAt: new Date().toISOString(),
     signatureStatus,
+    storage: (await isKvEnabled()) ? "upstash-redis" : "local-fallback",
   });
 };

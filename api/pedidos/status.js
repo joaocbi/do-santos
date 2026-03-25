@@ -1,4 +1,4 @@
-const { readJsonFile, writeJsonFile } = require("../_lib/store");
+const { readData, writeData, isKvEnabled } = require("../_lib/store");
 
 module.exports = async function handler(req, res) {
   if ((req.method || "GET") !== "POST") {
@@ -9,7 +9,7 @@ module.exports = async function handler(req, res) {
   }
 
   const payload = req.body || {};
-  const orders = readJsonFile("orders.json", []);
+  const orders = await readData("orders.json", []);
   const orderId = payload.orderId;
 
   if (!orderId) {
@@ -42,11 +42,12 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  writeJsonFile("orders.json", nextOrders);
+  await writeData("orders.json", nextOrders);
 
   return res.status(200).json({
     ok: true,
     message: "Status do pedido atualizado.",
     order: updatedOrder,
+    storage: (await isKvEnabled()) ? "upstash-redis" : "local-fallback",
   });
 };

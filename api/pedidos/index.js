@@ -1,4 +1,4 @@
-const { readJsonFile, writeJsonFile } = require("../_lib/store");
+const { readData, writeData, isKvEnabled } = require("../_lib/store");
 
 function createOrderNumber() {
   return `DSM-${String(Date.now()).slice(-8)}`;
@@ -6,13 +6,14 @@ function createOrderNumber() {
 
 module.exports = async function handler(req, res) {
   const method = req.method || "GET";
-  const orders = readJsonFile("orders.json", []);
+  const orders = await readData("orders.json", []);
 
   if (method === "GET") {
     return res.status(200).json({
       ok: true,
       total: orders.length,
       orders,
+      storage: (await isKvEnabled()) ? "upstash-redis" : "local-fallback",
     });
   }
 
@@ -31,12 +32,13 @@ module.exports = async function handler(req, res) {
     };
 
     orders.unshift(order);
-    writeJsonFile("orders.json", orders.slice(0, 200));
+    await writeData("orders.json", orders.slice(0, 200));
 
     return res.status(201).json({
       ok: true,
       message: "Pedido criado com sucesso.",
       order,
+      storage: (await isKvEnabled()) ? "upstash-redis" : "local-fallback",
     });
   }
 

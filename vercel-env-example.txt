@@ -1,2 +1,6 @@
 ADMIN_PANEL_PASSWORD=change_me
 MERCADO_PAGO_WEBHOOK_SECRET=change_me
+KV_REST_API_URL=auto_created_by_vercel_integration
+KV_REST_API_TOKEN=auto_created_by_vercel_integration
+KV_URL=auto_created_by_vercel_integration
+REDIS_URL=auto_created_by_vercel_integration
