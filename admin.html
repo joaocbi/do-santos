@@ -45,6 +45,8 @@
           <a href="#cliente">Dados do cliente</a>
           <a href="#pagamentos">Pagamentos</a>
           <a href="#mercadopago">Mercado Pago</a>
+          <a href="#logs">Logs webhook</a>
+          <a href="#pedidos">Pedidos</a>
           <a href="#entregas">Entregas</a>
           <a href="#categorias">Categorias</a>
           <a href="#produtos">Produtos</a>
@@ -257,6 +259,97 @@
                 </tr>
               </thead>
               <tbody id="deliveryMethodTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" id="logs">
+          <div class="section-title">
+            <span>Logs webhook</span>
+            <h2>Eventos recebidos do Mercado Pago</h2>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="refreshWebhookLogsButton">Atualizar logs</button>
+          </div>
+
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Assinatura</th>
+                  <th>Resumo</th>
+                </tr>
+              </thead>
+              <tbody id="webhookLogsTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-section" id="pedidos">
+          <div class="section-title">
+            <span>Pedidos</span>
+            <h2>Criação e acompanhamento de pedidos</h2>
+          </div>
+
+          <form class="admin-form" id="orderForm">
+            <label>
+              Nome do cliente
+              <input name="customerName" type="text" placeholder="Nome do cliente" required />
+            </label>
+            <label>
+              E-mail do cliente
+              <input name="customerEmail" type="email" placeholder="cliente@email.com" />
+            </label>
+            <label>
+              Valor total
+              <input name="totalValue" type="number" step="0.01" min="0" placeholder="0.00" required />
+            </label>
+            <label>
+              Status do pedido
+              <select name="status">
+                <option value="pendente">Pendente</option>
+                <option value="processando">Processando</option>
+                <option value="enviado">Enviado</option>
+                <option value="entregue">Entregue</option>
+              </select>
+            </label>
+            <label>
+              Status do pagamento
+              <select name="paymentStatus">
+                <option value="aguardando">Aguardando</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="recusado">Recusado</option>
+              </select>
+            </label>
+            <label class="full-width">
+              Itens em JSON
+              <textarea
+                name="itemsJson"
+                rows="6"
+                placeholder='[{"produto":"Bolsa premium","quantidade":1,"valor":249.9}]'
+              ></textarea>
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Criar pedido</button>
+              <button type="button" id="refreshOrdersButton" class="secondary-button">Atualizar pedidos</button>
+            </div>
+          </form>
+
+          <div class="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Cliente</th>
+                  <th>Status</th>
+                  <th>Pagamento</th>
+                  <th>Total</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody"></tbody>
             </table>
           </div>
         </section>

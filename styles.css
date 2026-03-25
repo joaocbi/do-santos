@@ -1,8 +1,8 @@
 :root {
-  --brand-primary: #d4a640;
-  --brand-primary-strong: #8f6718;
+  --brand-primary: #c6a75e;
+  --brand-primary-strong: #8a6a2f;
   --brand-secondary: #241d12;
-  --brand-accent: #f3dfa1;
+  --brand-accent: #e7d3a3;
   --background: #080705;
   --surface: #14110c;
   --surface-alt: #1d1811;
@@ -21,6 +21,7 @@ html {
 }
 
 body {
+ 
   margin: 0;
   font-family: "Inter", sans-serif;
   background:
@@ -198,6 +199,11 @@ input {
   font-weight: 700;
 }
 
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px;
+}
+
 .hero {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -262,9 +268,10 @@ input {
 }
 
 .button-primary {
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-strong));
-  box-shadow: var(--shadow);
+  color: #0b0b0b;
+  background: linear-gradient(135deg, var(--brand-accent), var(--brand-primary));
+  box-shadow: 0 10px 30px rgba(198, 167, 94, 0.25);
+  letter-spacing: 0.5px;
 }
 
 .button-secondary {
@@ -474,8 +481,10 @@ input {
 }
 
 .product-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.1rem;
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .product-card p {
@@ -486,9 +495,9 @@ input {
 
 .product-card strong {
   color: var(--brand-accent);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
-
 .admin-data-strip {
   padding: 36px 0;
 }
@@ -684,4 +693,205 @@ input {
   .hero-stats {
     flex-direction: column;
   }
+
+  /* brilho sutil premium */
+.button-primary,
+.product-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-primary::after,
+.product-badge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.25),
+    transparent
+  );
+  transition: 0.6s;
+}
+
+.button-primary:hover::after,
+.product-badge:hover::after {
+  left: 120%;
+}
+
+/* ===== HOVER PREMIUM COMPLETO ===== */
+
+.product-card,
+.collection-card,
+.offer-card,
+.mini-category-card {
+  transition: all 0.35s ease;
+  position: relative;
+}
+
+/* Efeito ao passar o mouse */
+.product-card:hover,
+.collection-card:hover,
+.offer-card:hover,
+.mini-category-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: var(--brand-primary);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+/* Brilho sutil ao passar o mouse */
+.product-card::after,
+.collection-card::after,
+.offer-card::after,
+.mini-category-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.product-card:hover::after,
+.collection-card:hover::after,
+.offer-card:hover::after,
+.mini-category-card:hover::after {
+  opacity: 1;
+}
+
+/* ===== CARD PREMIUM VITRINE ===== */
+
+.product-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #14110c, #1f1a13);
+  transition: all 0.35s ease;
+}
+
+/* imagem mais elegante */
+.product-thumb {
+  position: relative;
+  overflow: hidden;
+}
+
+/* efeito zoom na imagem */
+.product-card:hover .product-thumb {
+  transform: scale(1.05);
+  transition: 0.4s ease;
+}
+
+/* overlay escuro sofisticado */
+.product-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.6),
+    transparent
+  );
+  opacity: 0;
+  transition: 0.4s ease;
+}
+
+.product-card:hover .product-thumb::after {
+  opacity: 1;
+}
+
+/* botão escondido */
+.product-card::before {
+  content: "Ver produto";
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(135deg, var(--brand-accent), var(--brand-primary));
+  color: #0b0b0b;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+/* aparece no hover */
+.product-card:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== CARD NÍVEL PROFISSIONAL ===== */
+
+.product-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* favorito (coração) */
+.favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  padding: 6px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.favorite:hover {
+  color: #ff4d4d;
+  transform: scale(1.1);
+}
+
+/* estrelas */
+.stars {
+  color: #c6a75e;
+  font-size: 14px;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+/* info organizada */
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* botão comprar */
+.btn-buy {
+  margin-top: 10px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--brand-accent), var(--brand-primary));
+  color: #0b0b0b;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 0.3s;
+}
+
+/* aparece no hover */
+.product-card:hover .btn-buy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 }

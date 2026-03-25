@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" "
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -79,16 +79,18 @@
       <section class="hero container">
         <div class="hero-copy">
           <span class="hero-kicker">Vitrine premium</span>
-          <h1>Do Santos Market com identidade de luxo em preto e dourado</h1>
+          <h1>Para quem não segue tendências. Define presença.</h1>
           <p>
-            Uma vitrine moderna inspirada e
-            adaptada para uma direção visual mais elegante.
+            Uma curadoria de moda premium pensada para destacar sua identidade com elegância e sofisticação.
           </p>
 
           <div class="hero-actions">
             <a class="button button-primary" href="#collections">Comprar agora</a>
             <a class="button button-secondary" href="#offers">Ver ofertas</a>
           </div>
+          <p style="margin-top:15px; color:#d4af37;">
+            Edição limitada • Disponibilidade exclusiva
+          </p>
 
           <div class="hero-stats">
             <div>
@@ -109,13 +111,13 @@
         <div class="hero-visual">
           <div class="hero-banner-grid">
             <article class="hero-card hero-card-large">
-              <span>Coleção em destaque</span>
-              <strong>Peças de luxo selecionadas para cada ocasião</strong>
-              <p>Roupas, acessórios e ofertas em destaque com presença de marca mais forte.</p>
+              <span>Coleção exclusiva</span>
+              <strong>Peças que elevam sua presença</strong>
+              <p>Selecionadas para quem valoriza estilo, qualidade e sofisticação.</p>
             </article>
             <article class="hero-card accent">
-              <span>Oferta relâmpago</span>
-              <strong>Seleções da semana dourada</strong>
+              <span>Seleção da semana</span>
+              <strong>Destaques premium</strong>
             </article>
             <article class="hero-card dark">
               <span>Novo lançamento</span>
@@ -145,14 +147,24 @@
       <section class="mini-categories container" id="miniCategories">
         <article class="mini-category-card">
           <span>Feminino</span>
-          <strong>Calçados elegantes</strong>
+          <strong>Elegância que se destaca</strong>
+        </article>
+        
+        <article class="mini-category-card">
+          <span>Masculino</span>
+          <strong>Presença e estilo refinado</strong>
+        </article>
+        
+        <article class="mini-category-card">
+          <span>Acessórios</span>
+          <strong>Detalhes que transformam</strong>
         </article>
       </section>
 
       <section class="collections container" id="collections">
         <div class="section-heading">
           <span>Coleções populares</span>
-          <h2>Navegue pelas categorias que os clientes mais procuram</h2>
+          <h2>Descubra peças que refletem sua identidade</h2>
         </div>
 
         <div class="collection-grid" id="collectionGrid">
@@ -166,16 +178,33 @@
       <section class="product-showcase container">
         <div class="section-heading">
           <span>Mais vendidos</span>
-          <h2>seção de moda feminina</h2>
+          <h2>Seleção premium feminina</h2>
         </div>
 
         <div class="product-grid" id="productGrid">
           <article class="product-card">
-            <span class="product-badge">Novo</span>
-            <div class="product-thumb"></div>
-            <h3>Sandália linha dourada</h3>
-            <p>Seleção premium para campanhas em destaque.</p>
-            <strong>R$ 189,90</strong>
+            <article class="product-card">
+
+              <span class="product-badge">Mais vendido</span>
+              <div class="favorite">❤</div>
+            
+              <div class="product-thumb"></div>
+            
+              <div class="product-info">
+                <h3>Sandália Essência Dourada</h3>
+            
+                <div class="stars">★★★★★</div>
+            
+                <p>Elegância e sofisticação para compor seu estilo.</p>
+            
+                <strong>R$ 189,90</strong>
+            
+                <a href="https://wa.me/42991628586" class="btn-buy">
+                  Comprar no WhatsApp
+                </a>
+              </div>
+            
+            </article>
           </article>
         </div>
       </section>
@@ -205,6 +234,19 @@
         </div>
       </section>
 
+      <section class="luxury-position container">
+        <div class="section-heading">
+          <span>Sobre a marca</span>
+          <h2>Mais do que moda. Uma expressão de presença.</h2>
+        </div>
+      
+        <p style="max-width:600px; margin:auto; text-align:center; color:#ccc;">
+          A Do Santos Market nasce com o propósito de oferecer uma curadoria exclusiva
+          de peças que unem elegância, qualidade e identidade. Cada detalhe é pensado
+          para destacar quem você é.
+        </p>
+      </section>
+
       <section class="offers container" id="offers">
         <div class="section-heading">
           <span>Ofertas em destaque</span>
@@ -214,8 +256,8 @@
         <div class="offer-grid">
           <article class="offer-card">
             <span class="offer-tag">Até 50% off</span>
-            <h3>Destaque em calçados</h3>
-            <p>Use esta área para destacar ofertas rápidas e promoções por tempo limitado.</p>
+            <h3>Seleção exclusiva em calçados</h3>
+            <p>Peças selecionadas com condições especiais por tempo limitado.</p>
             <a href="#contact">Comprar oferta</a>
           </article>
           <article class="offer-card">
@@ -248,10 +290,14 @@
       <section class="newsletter">
         <div class="container newsletter-card">
           <div>
-            <span>Fique por dentro</span>
-            <h2>Receba as últimas ofertas da Do Santos Market</h2>
-            <p>Use este bloco para campanhas, captação de CRM ou chamada para WhatsApp.</p>
+            <span>Atendimento exclusivo</span>
+            <h2>Fale com um especialista</h2>
+            <p>Receba atendimento personalizado e descubra as melhores peças para seu estilo.</p>
           </div>
+          <a href="https://wa.me/42991628586" class="button button-primary">
+            Falar no WhatsApp
+          </a>
+        </div>
           <form class="newsletter-form">
             <input type="email" placeholder="Digite seu e-mail" aria-label="Endereço de e-mail" />
             <button type="submit">Inscrever-se</button>

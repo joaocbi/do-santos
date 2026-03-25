@@ -401,6 +401,8 @@
     requireAdminAccess(data);
     setupClientForm(data);
     setupMercadoPagoForm(data);
+    setupWebhookLogsSection();
+    setupOrdersSection();
     setupPaymentMethodForm(data);
     setupDeliveryMethodForm(data);
     setupCategoryForm(data);
@@ -866,6 +868,176 @@
     if (summaryDeliveries) {
       summaryDeliveries.textContent = String(data.deliveryMethods.length);
     }
+  }
+
+  async function fetchJson(url, options) {
+    const response = await fetch(url, options);
+    const json = await response.json();
+
+    if (!response.ok) {
+      throw new Error(json.message || "Erro na requisição.");
+    }
+
+    return json;
+  }
+
+  function renderWebhookLogs(logs) {
+    const tbody = document.getElementById("webhookLogsTableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    if (!logs.length) {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="3">Nenhum log recebido ainda.</td>`;
+      tbody.appendChild(row);
+      return;
+    }
+
+    logs.forEach((log) => {
+      const row = document.createElement("tr");
+      const signatureText = log.signatureStatus?.mode || "sem validacao";
+      const summary = log.body?.type || log.query?.type || "Evento recebido";
+
+      row.innerHTML = `
+        <td>${new Date(log.receivedAt).toLocaleString("pt-BR")}</td>
+        <td>${signatureText}</td>
+        <td>${summary}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  async function loadWebhookLogs() {
+    try {
+      const response = await fetchJson("/api/mercadopago/logs");
+      renderWebhookLogs(response.logs || []);
+    } catch (error) {
+      console.error("Erro ao carregar logs do webhook:", error);
+    }
+  }
+
+  function renderOrders(orders) {
+    const tbody = document.getElementById("ordersTableBody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    if (!orders.length) {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="6">Nenhum pedido cadastrado ainda.</td>`;
+      tbody.appendChild(row);
+      return;
+    }
+
+    orders.forEach((order) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${order.orderNumber}</td>
+        <td>${order.customerName}</td>
+        <td>${order.status}</td>
+        <td>${order.paymentStatus}</td>
+        <td>${currencyBRL(order.totalValue)}</td>
+        <td>
+          <button type="button" class="secondary-button table-button" data-order-status="${order.id}" data-next-status="processando">Processando</button>
+          <button type="button" class="secondary-button table-button" data-order-status="${order.id}" data-next-status="enviado">Enviado</button>
+          <button type="button" class="secondary-button table-button" data-order-status="${order.id}" data-next-status="entregue">Entregue</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    tbody.querySelectorAll("[data-order-status]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          await fetchJson("/api/pedidos/status", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderId: button.dataset.orderStatus,
+              status: button.dataset.nextStatus,
+            }),
+          });
+
+          await loadOrders();
+        } catch (error) {
+          console.error("Erro ao atualizar status do pedido:", error);
+          alert("Não foi possível atualizar o status do pedido.");
+        }
+      });
+    });
+  }
+
+  async function loadOrders() {
+    try {
+      const response = await fetchJson("/api/pedidos");
+      renderOrders(response.orders || []);
+    } catch (error) {
+      console.error("Erro ao carregar pedidos:", error);
+    }
+  }
+
+  function setupWebhookLogsSection() {
+    const refreshButton = document.getElementById("refreshWebhookLogsButton");
+    if (!refreshButton) return;
+
+    refreshButton.addEventListener("click", () => {
+      loadWebhookLogs();
+    });
+
+    loadWebhookLogs();
+  }
+
+  function setupOrdersSection() {
+    const form = document.getElementById("orderForm");
+    const refreshButton = document.getElementById("refreshOrdersButton");
+
+    if (!form || !refreshButton) return;
+
+    refreshButton.addEventListener("click", () => {
+      loadOrders();
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      let items = [];
+
+      try {
+        items = form.elements.itemsJson.value.trim() ? JSON.parse(form.elements.itemsJson.value.trim()) : [];
+      } catch (error) {
+        console.error("JSON de itens inválido:", error);
+        alert("O JSON de itens do pedido está inválido.");
+        return;
+      }
+
+      try {
+        await fetchJson("/api/pedidos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            customerName: form.elements.customerName.value.trim(),
+            customerEmail: form.elements.customerEmail.value.trim(),
+            totalValue: Number(form.elements.totalValue.value || 0),
+            status: form.elements.status.value,
+            paymentStatus: form.elements.paymentStatus.value,
+            items,
+          }),
+        });
+
+        form.reset();
+        await loadOrders();
+      } catch (error) {
+        console.error("Erro ao criar pedido:", error);
+        alert("Não foi possível criar o pedido.");
+      }
+    });
+
+    loadOrders();
   }
 
   document.addEventListener("DOMContentLoaded", () => {
