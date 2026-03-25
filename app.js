@@ -415,6 +415,7 @@
   function setupAdmin(data) {
     requireAdminAccess(data);
     setupClientForm(data);
+    setupAdminPasswordForm();
     setupMercadoPagoForm(data);
     setupWebhookLogsSection();
     setupOrdersSection();
@@ -455,12 +456,56 @@
         description: form.elements.description.value.trim(),
       };
 
-      form.elements.adminPassword.value = "";
       saveData(data);
       renderSite(data);
       renderSummary(data);
       console.log("Dados do cliente atualizados:", data.client);
       alert("Dados do cliente salvos com sucesso.");
+    });
+  }
+
+  function setupAdminPasswordForm() {
+    const form = document.getElementById("adminPasswordChangeForm");
+    const messageLabel = document.getElementById("adminPasswordChangeMessage");
+    if (!form || !messageLabel) return;
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const currentPassword = form.elements.currentPassword.value.trim();
+      const newPassword = form.elements.newPassword.value.trim();
+      const confirmPassword = form.elements.confirmPassword.value.trim();
+
+      if (newPassword.length < 6) {
+        messageLabel.textContent = "The new password must have at least 6 characters.";
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        messageLabel.textContent = "The new password confirmation does not match.";
+        return;
+      }
+
+      try {
+        const response = await fetchJson("/api/admin/password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+            confirmPassword,
+          }),
+        });
+
+        console.log("Admin password updated successfully.");
+        messageLabel.textContent = response.message || "Admin password updated successfully.";
+        form.reset();
+      } catch (error) {
+        console.error("Failed to update admin password:", error);
+        messageLabel.textContent = error.message || "Failed to update admin password.";
+      }
     });
   }
 

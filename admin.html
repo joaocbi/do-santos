@@ -43,6 +43,7 @@
 
         <nav class="admin-nav">
           <a href="#cliente">Dados do cliente</a>
+          <a href="#seguranca">Segurança</a>
           <a href="#pagamentos">Pagamentos</a>
           <a href="#mercadopago">Mercado Pago</a>
           <a href="#logs">Logs webhook</a>
@@ -113,6 +114,50 @@
             <div class="form-actions full-width">
               <button type="submit">Salvar dados do cliente</button>
             </div>
+          </form>
+        </section>
+
+        <section class="admin-section" id="seguranca">
+          <div class="section-title">
+            <span>Segurança</span>
+            <h2>Senha do painel administrativo</h2>
+          </div>
+
+          <form class="admin-form compact-form" id="adminPasswordChangeForm">
+            <label>
+              Senha atual
+              <input
+                name="currentPassword"
+                type="password"
+                placeholder="Digite a senha atual"
+                required
+              />
+            </label>
+            <label>
+              Nova senha
+              <input
+                name="newPassword"
+                type="password"
+                placeholder="Digite a nova senha"
+                required
+              />
+            </label>
+            <label>
+              Confirmar nova senha
+              <input
+                name="confirmPassword"
+                type="password"
+                placeholder="Repita a nova senha"
+                required
+              />
+            </label>
+            <div class="form-actions full-width">
+              <button type="submit">Alterar senha do painel</button>
+            </div>
+            <p class="warning-text full-width">
+              Por segurança, a senha atual não é exibida na tela. Use o campo de senha atual para validar a troca.
+            </p>
+            <p class="full-width" id="adminPasswordChangeMessage"></p>
           </form>
         </section>
 

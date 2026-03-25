@@ -1,3 +1,5 @@
+const { validateAdminPassword } = require("../_lib/admin-auth");
+
 module.exports = async function handler(req, res) {
   if ((req.method || "GET") !== "POST") {
     return res.status(405).json({
@@ -8,16 +10,16 @@ module.exports = async function handler(req, res) {
 
   const body = req.body || {};
   const password = body.password || "";
-  const configuredPassword = process.env.ADMIN_PANEL_PASSWORD || "";
+  const validation = await validateAdminPassword(password);
 
-  if (!configuredPassword) {
+  if (validation.source === "missing") {
     return res.status(503).json({
       ok: false,
       message: "A senha do painel não está configurada no ambiente.",
     });
   }
 
-  if (password !== configuredPassword) {
+  if (!validation.valid) {
     return res.status(401).json({
       ok: false,
       message: "Senha inválida.",
@@ -27,5 +29,6 @@ module.exports = async function handler(req, res) {
   return res.status(200).json({
     ok: true,
     message: "Login realizado com sucesso.",
+    source: validation.source,
   });
 };
